@@ -1,0 +1,20 @@
+-- Import libraries
+local beautiful = require("beautiful")
+local awful = require("awful")
+local os = require("os")
+
+-- Basic configuration
+terminal = "urxvt"
+editor = "emacs-28.0.50"
+modkey = "Mod1"
+
+-- Load the theme
+configDirectory = os.getenv("HOME") .. "/.config/awesome/"
+beautiful.init(configDirectory .. "theme.lua")
+
+-- Configure Tags
+tags = {}
+for s = 1, awful.screen.count() do
+    -- Each screen has its own tag table.
+    tags[s] = awful.tag({ 1, 2, 3, 4, 5, 6, 7, 8, 9 }, s, layouts[1])
+end

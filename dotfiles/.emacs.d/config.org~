@@ -1,0 +1,430 @@
+* PACKAGE MANAGMENT
+** Add Package Sources
+#+BEGIN_SRC emacs-lisp
+  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                           ("melpa-stable" . "https://stable.melpa.org/packages/")
+                           ("org" . "https://orgmode.org/elpa/")
+                           ("elpa" . "https://elpa.gnu.org/packages/")))
+
+  (package-initialize)
+  (unless package-archive-contents
+    (package-refresh-contents))
+#+END_SRC
+** Install use-package
+#+BEGIN_SRC emacs-lisp
+  (unless (package-installed-p 'use-package)
+    (package-install 'use-package))
+
+  (require 'use-package)
+  (setq use-package-always-ensure t)
+#+END_SRC
+
+* PACKAGES
+** Install Evil-Mode and Evil-Collection for VIM Keybindings
+#+BEGIN_SRC emacs-lisp
+  (setq evil-want-keybinding nil)
+  ;; Download Evil
+  (unless (package-installed-p 'evil)
+    (package-install 'evil))
+
+  ;; Enable Evil
+  (require 'evil)
+  (evil-mode 1)
+  (use-package evil-collection
+    :after evil
+    :config
+    (evil-collection-init))
+#+END_SRC
+** Install and configure company mode
+#+BEGIN_SRC emacs-lisp
+  (use-package company
+    :ensure
+    :custom
+    (company-idle-delay 0.5) ;; how long to wait until popup
+    ;; (company-begin-commands nil) ;; uncomment to disable popup
+    :bind
+    (:map company-active-map
+          ("C-n". company-select-next)
+          ("C-p". company-select-previous)
+          ("M-<". company-select-first)
+          ("M->". company-select-last)))
+
+#+END_SRC
+
+** Install yasnippet
+#+BEGIN_SRC emacs-lisp
+  (use-package yasnippet
+    :ensure
+    :config
+    (yas-reload-all)
+    (add-hook 'prog-mode-hook 'yas-minor-mode)
+    (add-hook 'text-mode-hook 'yas-minor-mode))
+#+END_SRC
+
+** Install flycheck
+#+BEGIN_SRC
+(use-package flycheck :ensure)
+#+END_SRC
+
+** Install the Nord-Theme
+#+BEGIN_SRC emacs-lisp
+  (unless (package-installed-p 'nord-theme)
+    (package-install 'nord-theme))
+#+END_SRC
+
+** Install the Dracula-Theme
+#+BEGIN_SRC emacs-lisp
+  (unless (package-installed-p 'dracula-theme)
+    (package-install 'dracula-theme))
+#+END_SRC
+
+** Install EXWM
+#+BEGIN_SRC emacs-lisp
+  (unless (package-installed-p 'exwm)
+    (package-install 'exwm))
+  (require 'exwm)
+  (require 'exwm-config)
+  ;;(exwm-config-default)
+#+END_SRC
+  
+** Install Counsel and configure it
+#+BEGIN_SRC emacs-lisp
+  (use-package counsel
+    :bind (("C-M-j" . 'counsel-switch-buffer)
+           :map minibuffer-local-map
+           ("C-r" . 'counsel-minibuffer-history))
+    :config
+    (counsel-mode 1))
+#+END_SRC
+
+** Install Ivy and Ivy-Rich
+#+BEGIN_SRC emacs-lisp
+  (use-package ivy
+    :diminish
+    :bind (("C-s" . swiper)
+           :map ivy-minibuffer-map
+           ("TAB" . ivy-alt-done)
+           ("C-l" . ivy-alt-done)
+           ("C-j" . ivy-next-line)
+           ("C-k" . ivy-previous-line)
+           :map ivy-switch-buffer-map
+           ("C-k" . ivy-previous-line)
+           ("C-l" . ivy-done)
+           ("C-d" . ivy-switch-buffer-kill)
+           :map ivy-reverse-i-search-map
+           ("C-k" . ivy-previous-line)
+           ("C-d" . ivy-reverse-i-search-kill))
+    :config
+    (ivy-mode 1))
+
+  (use-package ivy-rich
+    :after ivy
+    :init
+    (ivy-rich-mode 1))
+#+END_SRC
+
+** Install lsp-mode
+#+BEGIN_SRC emacs-lisp
+  (use-package lsp-mode
+    :custom
+    (lsp-rust-server 'rls)
+    (lsp-rust-analyzer-server-command "~/.local/bin/rust-analyzer")
+    (lsp-rust-rls-server-command "/usr/bin/rls")
+    :hook (
+           (rust-mode . lsp)
+           (python-mode . lsp)
+           )
+    :commands lsp)
+#+END_SRC
+
+** Install company
+#+BEGIN_SRC emacs-lisp
+(use-package company)
+#+END_SRC
+
+** Install irony-mode
+#+BEGIN_SRC emacs-lisp
+  (unless (package-installed-p 'irony)
+    (package-install 'irony))
+  (require 'irony)
+
+  (add-hook 'c++-mode-hook 'irony-mode)
+  (add-hook 'c-mode-hook 'irony-mode)
+  (add-hook 'objc-mode-hook 'irony-mode)
+  (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+#+END_SRC
+  
+** Install swift-mode and lsp-sourcekit for Swift Files
+#+BEGIN_SRC emacs-lisp
+  (use-package swift-mode
+    :hook (swift-mode . (lambda () (lsp))))
+  (use-package lsp-sourcekit
+    :after lsp-mode
+    :config
+    (setq lsp-sourcekit-executable "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/sourcekit-lsp"))
+#+END_SRC
+
+** Install vterm as a terminal
+#+BEGIN_SRC emacs-lisp
+  (use-package vterm)
+#+END_SRC
+
+** Install rainbow-delimiters
+#+BEGIN_SRC emacs-lisp
+  (use-package rainbow-delimiters
+    :hook (prog-mode . rainbow-delimiters-mode))
+#+END_SRC
+
+** Install which-key
+#+BEGIN_SRC emacs-lisp
+  (use-package which-key
+    :defer 0
+    :diminish which-key-mode
+    :config
+    (which-key-mode)
+    (setq which-key-idle-delay 1))
+#+END_SRC
+
+** Install lsp-jedi for Python autocompletion
+#+BEGIN_SRC emacs-lisp
+  (use-package lsp-jedi
+    :ensure t
+    :config
+    (with-eval-after-load "lsp-mode"
+      (add-to-list 'lsp-disabled-clients 'pyls)
+      (add-to-list 'lsp-enabled-clients 'jedi)))
+#+END_SRC
+* LOOK
+** Basic UI Changes
+#+BEGIN_SRC emacs-lisp
+  (setq inhibit-startup-message t) ;; Disable the startup message and start in a scratch buffer.
+
+  ;; Setup the font.
+  (set-face-attribute 'default t :font "JetBrains Mono" :height 200)
+  (scroll-bar-mode -1) ;; Disable the scrollbar.
+  (tooltip-mode -1) ;; Disable the tooltips.
+  (tool-bar-mode -1) ;; Disable the toolbar.
+  (menu-bar-mode -1) ;; Disable the menubar.
+  (setq-default mode-line-format nil) ;; Hide the mode line on the bottom
+  (add-hook 'window-setup-hook 'toggle-frame-fullscreen t) ;; Start in fullscreen mode.
+  (setq visible-bell t) ;; Disable the macOS Error Sound and flash instead.
+#+END_SRC
+** Window Changes
+*** Make the window transparent
+#+BEGIN_SRC emacs-lisp
+  (set-frame-parameter (selected-frame) 'alpha '(75 75))
+  (add-to-list 'default-frame-alist '(alpha 75 75))
+#+END_SRC
+
+** Enable the Theme
+#+BEGIN_SRC emacs-lisp
+  (load-theme 'dracula t)
+#+END_SRC
+
+** Enable line numbering
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+#+END_SRC
+
+* MACOS TWEAKS
+** Use the command-key as the meta-key
+#+BEGIN_SRC emacs-lisp
+  (setq mac-option-key-is-meta nil
+        mac-command-key-is-meta t
+        mac-command-modifier 'meta
+        mac-option-modifier 'none)
+#+END_SRC
+
+** Set the Tab Width to 4 spaces
+#+BEGIN_SRC emacs-lisp
+  (setq-default tab-width 4)
+#+END_SRC
+
+* BEHAVIOR
+** Split windows vertically by default
+#+BEGIN_SRC emacs-lisp
+  (setq split-width-threshold 0)
+  (setq split-height-threshold nil)
+#+END_SRC
+
+** Set the auto-save path
+#+BEGIN_SRC emacs-lisp
+  (setq auto-save-file-name-transforms
+        `((".*" "~/.emacs-saves/" t)))
+#+END_SRC
+
+** Don't open a new window when executing a shell command
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'display-buffer-alist (cons "\\*Async Shell Command\\*.*" (cons #'display-buffer-no-window nil)))
+#+END_SRC
+   
+** Commenting a line
+#+BEGIN_SRC emacs-lisp
+  (defun comment-or-uncomment-region-or-line ()
+    (interactive)
+    (let (beg end)
+      (if (region-active-p)
+          (setq beg (region-beginning) end (region-end))
+        (setq beg (line-beginning-position) end (line-end-position)))
+      (comment-or-uncomment-region beg end)
+      (next-line)))
+#+END_SRC
+
+** Rust Configuration
+#+BEGIN_SRC emacs-lisp
+  (use-package racer)
+  (add-hook 'rust-mode-hook #'racer-mode)
+  (add-hook 'racer-mode-hook #'eldoc-mode)
+  (add-hook 'racer-mode-hook #'company-mode)
+
+  (require 'rust-mode)
+  (define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
+  (setq company-tooltip-align-annotations t)
+#+END_SRC
+** Make line numbering relative
+#+BEGIN_SRC emacs-lisp
+  (setq display-line-numbers-type 'relative)
+#+END_SRC
+
+** Make links the default browser
+#+BEGIN_SRC emacs-lisp
+  (defun links-browse-url (url &rest ignore)
+    (interactive)
+    (async-shell-command (concat "links -g " "'" url "'")))
+  (setq browse-url-browser-function 'links-browse-url)
+#+END_SRC
+
+** Configure the undo behaivior for Evil Mode
+#+BEGIN_SRC emacs-lisp
+  (use-package undo-tree
+    :config
+    (turn-on-undo-tree-mode))
+  (global-undo-tree-mode)    
+  (evil-set-undo-system 'undo-tree)
+#+END_SRC
+
+** Configure the evil-mode search
+#+BEGIN_SRC emacs-lisp
+  (setq evil-ex-search-case 'insensitive)
+#+END_SRC
+
+** Org Mode Settings
+#+BEGIN_SRC emacs-lisp
+  (defun org-mode-setup ()
+    (org-global-cycle)
+    (org-indent-mode)
+    (setq evil-auto-indent 0))
+
+  (use-package org
+    :hook (org-mode . org-mode-setup)
+    :config (setq org-ellipsis " ▼"))
+#+END_SRC
+
+* FEATURES
+** Bookmarks
+I store my bookmarks as a file in the home directory named "bookmarks". I can decode them to a python script I've written. It's written in this syntax:
+name=url
+bookmark1=https://test.com
+This function reads a bookmark the user wants to open and opens the returned url from the python script in eww.
+#+BEGIN_SRC emacs-lisp
+  (defun open-bookmark ()
+    (interactive)
+    (setq bookmark (read-string "Bookmark: "))
+    ;; Get the last line of output.
+    (setq url (car (last (butlast (split-string (shell-command-to-string (concat "cd ~/; python3 ~/.emacs.d/decodeBookmarks.py " bookmark)) "\n")))))
+    (browse-url url))
+#+END_SRC
+  
+* KEYBOARD SHORTCUTS
+** Open M-x like with M-o
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "M-o") #'counsel-M-x)
+#+END_SRC
+
+** Open dired with M-f
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "M-f") #'find-file)
+#+END_SRC
+
+** Open a Terminal with M-t
+#+BEGIN_SRC emacs-lisp
+  (defun open-terminal ()
+    (interactive)
+    (async-shell-command "xrdb -merge ~/.Xresources; urxvt"))
+  (global-set-key (kbd "M-t") 'open-terminal)
+#+END_SRC
+** Show recent files with M-r
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "M-r") #'counsel-recentf)
+#+END_SRC
+
+** Create a new buffer with M-n
+#+BEGIN_SRC emacs-lisp
+  (defun create-new-buffer ()
+    (interactive) (switch-to-buffer "new"))
+  (global-set-key (kbd "M-n") #'create-new-buffer)
+#+END_SRC
+
+** Comment a line with M-/
+#+begin_src emacs-lisp
+  (global-set-key (kbd "M-/") #'comment-or-uncomment-region-or-line)
+#+end_src
+
+** Reformat code with M-p
+#+begin_src emacs-lisp 
+  (defun indent-buffer ()
+    (interactive)
+    (save-excursion
+      (indent-region (point-min) (point-max) nil)))
+  (global-set-key (kbd "M-p") 'indent-buffer)
+#+end_src
+
+** Search Google with C-g
+#+begin_src emacs-lisp 
+  (defun search-google ()
+    (interactive)
+    (setq search (read-string "Enter your search:"))
+    (browse-url (concat "https://www.google.com/search?q=" search)))
+  (global-set-key (kbd "C-g") 'search-google)
+#+end_src
+
+** Kill current buffer with M-Shift-k
+#+begin_src emacs-lisp 
+  (global-set-key (kbd "M-S-k") 'kill-this-buffer)
+#+end_src
+
+** List buffers with M-b
+#+begin_src emacs-lisp
+  (global-set-key (kbd "M-b") 'buffer-menu)
+#+end_src
+
+** Open a Bookmark with C-b
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "M-e") 'open-bookmark)
+#+END_SRC
+
+** Split Window to the right with M-s
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "M-s") 'split-window-right)
+#+END_SRC
+
+** Go to the right window with C-l
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-l") 'evil-window-right)
+#+END_SRC
+
+** Go to the left window with C-h
+#+BEGIN_SRC emacs-lisp
+  (global-set-key (kbd "C-h") 'evil-window-left)
+#+END_SRC
+
+** EXWM Global Keys
+#+BEGIN_SRC emacs-lisp
+  (setq exwm-input-prefix-keys
+        '(?\M-o
+          ?\M-:))
+  (setq exwm-input-global-keys
+        `(
+          ([?\s-f] . find-file)
+          ([?\s-o] . counsel-M-x)))
+#+END_SRC

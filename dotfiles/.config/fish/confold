@@ -1,0 +1,175 @@
+set -U fish_user_paths $HOME/.local/bin $HOME/Applications $fish_user_paths
+set fish_greeting                      # Disables fish's intro message
+set EDITOR "nvim"      
+set VISUAL "nvim"      
+
+function fish_user_key_bindings
+  # fish_default_key_bindings
+  fish_vi_key_bindings
+end
+
+# Colors
+set fish_color_normal brcyan
+set fish_color_autosuggestion '#7d7d7d'
+set fish_color_command brcyan
+set fish_color_error '#ff6c6b'
+set fish_color_param brcyan
+
+# Functions needed for !! and !$
+function __history_previous_command
+  switch (commandline -t)
+  case "!"
+    commandline -t $history[1]; commandline -f repaint
+  case "*"
+    commandline -i !
+  end
+end
+
+function __history_previous_command_arguments
+  switch (commandline -t)
+  case "!"
+    commandline -t ""
+    commandline -f history-token-search-backward
+  case "*"
+    commandline -i '$'
+  end
+end
+# The bindings for !! and !$
+if [ $fish_key_bindings = fish_vi_key_bindings ];
+  bind -Minsert ! __history_previous_command
+  bind -Minsert '$' __history_previous_command_arguments
+else
+  bind ! __history_previous_command
+  bind '$' __history_previous_command_arguments
+end
+
+# Function for creating a backup file
+# ex: backup file.txt
+# result: copies file as file.txt.bak
+function backup --argument filename
+    cp $filename $filename.bak
+end
+
+
+alias python="python3"
+
+# navigation
+alias ..='cd ..' 
+alias ...='cd ../..'
+alias .3='cd ../../..'
+alias .4='cd ../../../..'
+alias .5='cd ../../../../..'
+
+# brew
+alias upgrade='brew upgrade'
+alias install='brew install'
+alias cleanup='brew cleanup'  
+alias doctor='brew doctor'
+
+# Colorize grep output (good for log files)
+alias grep='grep --color=auto'
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+
+# confirm before overwriting something
+alias cp="cp -i"
+alias mv='mv -i'
+alias rm='rm -i'
+alias swap='sysctl vm.swapusage'
+
+## get top process eating memory
+alias psmem='ps aux | sort -nr -k 4'
+alias psmem10='ps auxf | sort -nr -k 4 | head -10'
+
+## get top process eating cpu ##
+alias pscpu='ps auxf | sort -nr -k 3'
+alias pscpu10='ps auxf | sort -nr -k 3 | head -10'
+
+# Merge Xresources
+alias merge='xrdb -merge ~/.Xresources'
+
+# gpg encryption
+# verify signature for isos
+alias gpg-check="gpg2 --keyserver-options auto-key-retrieve --verify"
+# receive the key of a developer
+alias gpg-retrieve="gpg2 --keyserver-options auto-key-retrieve --receive-keys"
+
+# youtube-dl
+alias yta-aac="youtube-dl --extract-audio --audio-format aac "
+alias yta-best="youtube-dl --extract-audio --audio-format best "
+alias yta-flac="youtube-dl --extract-audio --audio-format flac "
+alias yta-m4a="youtube-dl --extract-audio --audio-format m4a "
+alias yta-mp3="youtube-dl --extract-audio --audio-format mp3 "
+alias yta-opus="youtube-dl --extract-audio --audio-format opus "
+alias yta-vorbis="youtube-dl --extract-audio --audio-format vorbis "
+alias yta-wav="youtube-dl --extract-audio --audio-format wav "
+alias ytv-best="youtube-dl -f bestvideo+bestaudio "
+
+### RANDOM COLOR SCRIPT ###
+# Get this script from my GitLab: gitlab.com/dwt1/shell-color-scripts
+# Or install it from the Arch User Repository: shell-color-scripts
+#sh ~/.shell-color-scripts/colorscripts/show-shell-color-scripts.sh
+
+### SETTING THE STARSHIP PROMPT ###
+/opt/local/bin/starship init fish | source
+
+set -g fish_user_paths "/opt/homebrew/sbin" $fish_user_paths
+
+# A better flutter run (at least when running in macOS)
+function frunmac
+	flutter build macos
+	export PROJECT_NAME=(basename $PWD)
+	open build/macos/Build/Products/Debug/$PROJECT_NAME.app
+end
+
+export EDITOR="nvim"      
+export VISUAL="nvim"      
+alias cl='clear'
+alias uninstall='brew uninstall'
+#export MANPAGER="vim -c 'set ft=man' -"
+alias gp="git push"
+alias linecounter="~/.commands/linecounterr"
+export PATH="/opt/homebrew/lib/ruby/gems/3.0.0/bin:$PATH"
+export PATH="/opt/homebrew/Cellar/ruby/3.0.2/bin:$PATH"
+alias power='sudo powermetrics -s cpu_power, gpu_power | grep "GPU Power\|Package Power"'
+export PATH="$PATH:$HOME/.cargo/bin"
+#set -g fish_user_paths "/opt/homebrew/opt/openjdk/bin" $fish_user_paths
+fish_add_path /opt/homebrew/opt/openjdk/bin
+export PATH="$PATH:/$HOME/go/bin"
+alias playAmbientSounds="sh '$HOME/Music/Ambient Sound Effects/Play.sh'"
+alias kitten='kitty +kitten'
+export PATH="$PATH:/Applications/Emacs.app/Contents/MacOS/bin"
+export PATH="$PATH:$HOME/.emacs.d/bin"
+#export RUST_SRC_PATH=(rustc --print sysroot)/lib/rustlib/src/rust/library
+alias grep='grep -i'
+alias update='sudo port selfupdate; sudo port upgrade outdated; sudo port uninstall inactive'
+export LDFLAGS="-L/opt/local/lib"
+fish_add_path /opt/homebrew/opt/sphinx-doc/bin
+export PATH="$PATH:$HOME/.bin:$HOME/.local/flutter/bin"
+export GOPATH="$HOME/.local/go"
+export PATH="$PATH:/usr/local/bin://opt/local/Library/Frameworks/Python.framework/Versions/3.9/bin/"
+export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
+export LUA_PATH="/opt/local/share/lua/5.3/?.lua;/opt/local/share/lua/5.4/?/init.lua;/opt/local/lib/lua/5.4/?.lua;/opt/local/lib/lua/5.4/?/init.lua;./?.lua;./?/init.lua;$HOME/.config/awesome/lain/init.lua"
+export NO_AT_BRIDGE=1
+export LANG="en_US.UTF-8"
+export DISPLAY=:0
+export PATH="$PATH:/Applications/Godot.app/Contents/MacOS"
+export PKG_CONFIG_PATH=/opt/local//lib/pkgconfig/
+alias links='links -html-g-background-color 0x2E3440 -html-g-ignore-document-color 1 -menu-foreground-color 0xFFFFFF -html-g-text-color 0xFDFFCE -html-g-link-color 0xA7F47B -menu-background-color 0x2E3440 -scroll-bar-bar-color 0x111111 -scroll-bar-frame-color 0x111111 -font ~/Library/Fonts/JetBrains\ Mono\ Bold\ Italic\ Nerd\ Font\ Complete\ Mono.ttf -font-bold ~/Library/Fonts/JetBrains\ Mono\ Bold\ Italic\ Nerd\ Font\ Complete\ Mono.ttf -font-monospaced ~/Library/Fonts/JetBrains\ Mono\ Bold\ Italic\ Nerd\ Font\ Complete\ Mono.ttf -font-bold ~/Library/Fonts/JetBrains\ Mono\ Bold\ Italic\ Nerd\ Font\ Complete\ Mono.ttf -font-italic ~/Library/Fonts/JetBrains\ Mono\ Bold\ Italic\ Nerd\ Font\ Complete\ Mono.ttf -font-bold ~/Library/Fonts/JetBrains\ Mono\ Bold\ Italic\ Nerd\ Font\ Complete\ Mono.ttf -http.fake-firefox 0 -http.do-not-track 1 -enable-cookies 0 -save-url-history 1 -save-cookies 0'
+# Use nvim instead of vim
+alias vim="nvim"
+# Use exa instead of ls
+alias ls="exa --icons -a --group-directories-first"
+# pfetch
+#export PF_INFO="ascii os host kernel shell wm pkgs"
+#pfetch
+
+# Clear the screen before every command
+function preexec --on-event fish_preexec
+	clear
+end
+
+# Startup tmux
+if [ "$TMUX" = "" ]
+	tmux attach 
+end

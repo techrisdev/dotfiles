@@ -1,0 +1,90 @@
+(setq package-archives '(("melpa" . "https://melpa.org/packages/")
+						 ("melpa-stable" . "https://stable.melpa.org/packages/")
+						 ("org" . "https://orgmode.org/elpa/")
+						 ("elpa" . "https://elpa.gnu.org/packages/")))
+
+(package-initialize)
+(unless package-archive-contents
+   (package-refresh-contents))
+
+(unless (package-installed-p 'use-package)
+   (package-install 'use-package))
+
+(require 'use-package)
+(setq use-package-always-ensure t)
+
+;; Download Evil
+(unless (package-installed-p 'evil)
+  (package-install 'evil))
+
+;; Enable Evil
+(require 'evil)
+(evil-mode 1)
+
+(unless (package-installed-p 'nord-theme)
+  (package-install 'nord-theme))
+
+(use-package counsel
+  :bind (("C-M-j" . 'counsel-switch-buffer)
+		 :map minibuffer-local-map
+		 ("C-r" . 'counsel-minibuffer-history))
+  :config
+  (counsel-mode 1))
+
+(use-package ivy
+  :diminish
+  :bind (("C-s" . swiper)
+		 :map ivy-minibuffer-map
+		 ("TAB" . ivy-alt-done)
+		 ("C-l" . ivy-alt-done)
+		 ("C-j" . ivy-next-line)
+		 ("C-k" . ivy-previous-line)
+		 :map ivy-switch-buffer-map
+		 ("C-k" . ivy-previous-line)
+		 ("C-l" . ivy-done)
+		 ("C-d" . ivy-switch-buffer-kill)
+		 :map ivy-reverse-i-search-map
+		 ("C-k" . ivy-previous-line)
+		 ("C-d" . ivy-reverse-i-search-kill))
+  :config
+  (ivy-mode 1))
+
+(use-package ivy-rich
+  :after ivy
+  :init
+  (ivy-rich-mode 1))
+
+;;(use-package swift-mode)
+
+(use-package lsp-mode
+  :init
+  (setq lsp-keymap-prefix "C-c l")
+  :hook (
+		 (swift-mode . lsp)
+  :commands lsp)
+
+(setq inhibit-startup-message t) ;; Disable the startup message and start in a scratch buffer.
+
+;; Setup the font.
+(set-face-attribute 'default nil :font "JetBrains Mono" :height 250)
+
+(scroll-bar-mode -1) ;; Disable the scrollbar.
+(tooltip-mode -1) ;; Disable the tooltips.
+(tool-bar-mode -1) ;; Disable the toolbar.
+(menu-bar-mode -1) ;; Disable the menubar.
+(add-hook 'window-setup-hook 'toggle-frame-fullscreen t) ;; Start in fullscreen mode.
+(setq visible-bell t) ;; Disable the macOS Error Sound and flash instead.
+
+(set-frame-parameter (selected-frame) 'alpha '(75 75))
+(add-to-list 'default-frame-alist '(alpha 75 75))
+
+(load-theme 'nord t)
+
+(setq mac-option-key-is-meta nil
+	mac-command-key-is-meta t
+	mac-command-modifier 'meta
+	mac-option-modifier 'none)
+
+(setq-default tab-width 4)
+
+(add-hook 'prog-mode-hook 'display-line-numbers-mode)

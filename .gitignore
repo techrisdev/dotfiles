@@ -1,0 +1,13 @@
+# Dotfiles to exclude (private)
+#.gitconfig
+fish_variables
+.zsh_history
+recentf
+recentf~
+auto-save-list/
+elpa/
+url/
+prefs.js
+.zsh_sessions/
+heroic/
+legendary/

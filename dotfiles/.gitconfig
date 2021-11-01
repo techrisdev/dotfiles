@@ -1,0 +1,9 @@
+[user]
+	name = techrisdev
+	email = techrisdev
+[core]
+	excludesfile = ~/.gitignore_global
+	precomposeUnicode = true
+[credential]
+	helper = osxkeychain
+
