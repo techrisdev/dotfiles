@@ -65,6 +65,8 @@ tmprog() {
 	tmutil status | LC_NUMERIC="C" awk -F'"' '/_raw_Percent/ {print $4 * 100}'
 }
 
+alias gp="git push"
+
 # Use Python 3 by default if it isn't already
 alias python="python3"
 alias pip="python3 -m pip"
