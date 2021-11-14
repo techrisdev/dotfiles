@@ -38,14 +38,14 @@ alias rm='rm -i'
 alias vim="nvim"
 
 # Same thing for 'sudo vim'
-sudo() {
-	if [ "$1" = "vim" ]; then
+#sudo() {
+#	if [ "$1" = "vim" ]; then
 		# This assumes that sudo is located at /usr/bin/sudo
-		sudo nvim "${@:2}"
-	else
-		sudo "$@"
-	fi
-}
+#		sudo nvim "${@:2}"
+#	else
+#		sudo "$@"
+#	fi
+#}
 
 # Use exa instead of ls
 alias ls="exa --icons -a --group-directories-first"
