@@ -4,7 +4,8 @@ export PATH="/usr/bin:/usr/local/bin:/bin:/usr/sbin:/sbin:$HOME/.cargo/bin:$HOME
 #export PATH="$PATH:/opt/local/bin:/opt/local/sbin"
 
 ### Startup tmux if it isn't running already (before doing anything else)
-[[ $TERM != "screen" ]] && tmux a
+# I don't use tmux on linux at the moment
+#[[ $TERM != "screen" ]] && tmux a
 
 ### Other path variables
 #export PKG_CONFIG_PATH="/opt/local/lib/pkgconfig/"
