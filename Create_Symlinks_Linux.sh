@@ -1,7 +1,10 @@
 #!/bin/bash
+rm -f ~/.zshrc
+rm -f ~/.zshrcmac
+rm -f ~/.zshrclinux
 cd ~/.dotfiles
 stow dotfiles
 cd
 rm -rf ~/Library
-rm .zshrc
+rm -f .zshrc
 mv .zshrclinux .zshrc
