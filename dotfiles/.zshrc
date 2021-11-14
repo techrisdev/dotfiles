@@ -1,14 +1,14 @@
 ##### My zsh config
 ### Path variable
-export PATH="/opt/homebrew/bin:/opt/homebrew/opt/bison/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$HOME/.cargo/bin:$HOME/.bin:$HOME/.local/flutter/bin:/Applications/Xcode.app/Contents/Developer/usr/bin"
+export PATH="/opt/homebrew/bin:/opt/local/bin:/opt/X11/bin:/opt/homebrew/opt/bison/bin:/Applications/Visual Studio Code.app/Contents/Resources/app/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$HOME/.cargo/bin:$HOME/.bin:$HOME/.local/flutter/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:$HOME/go/bin:/opt/homebrew/opt/openssl/bin"
 #export PATH="$PATH:/opt/local/bin:/opt/local/sbin"
 
 ### Startup tmux if it isn't running already (before doing anything else)
-if [ "$TMUX" = "" ]; then /opt/homebrew/bin/tmux attach; fi
+[[ $TERM != "screen" ]] && tmux a
 
 ### Other path variables
 #export PKG_CONFIG_PATH="/opt/local/lib/pkgconfig/"
-export PKG_CONFIG_PATH="/opt/homebrew/lib/pkgconfig/"
+export PKG_CONFIG_PATH="/opt/homebrew/lib/pkgconfig:/opt/local/lib/pkgconfig:/opt/homebrew/opt/openssl@3/lib/pkgconfig:/opt/homebrew/Cellar/openssl@3/3.0.0_1/lib/pkgconfig:/opt/homebrew/opt/libarchive/lib/pkgconfig:/opt/homebrew/opt/libedit/lib/pkgconfig"
 #export LUA_PATH="/opt/local/share/lua/5.3/?.lua;/opt/local/share/lua/5.4/?/init.lua;/opt/local/lib/lua/5.4/?.lua;/opt/local/lib/lua/5.4/?/init.lua;./?.lua;./?/init.lua;"
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/openjdk16-zulu/Contents/Home
 
@@ -23,6 +23,9 @@ export VISUAL=nvim
 # Default C Compiler Flags
 #export LDFLAGS="-L/opt/local/lib"
 #export CFLAGS="-I/opt/local/include"
+export LDFLAGS="-L/opt/homebrew/opt/openssl@3/lib -L/opt/homebrew/opt/openssl/lib -L/opt/homebrew/opt/libarchive/lib -L/opt/homebrew/opt/libedit/lib"
+export CFLAGS="-I/opt/homebrew/opt/openssl@3/include -I/opt/homebrew/opt/openssl/include -I/opt/homebrew/opt/libarchive/include"
+export CPPFLAGS="-I/opt/homebrew/opt/libedit/include"
 
 # Chrome Executable for Flutter Web Apps (I like to use the Brave Browser)
 export CHROME_EXECUTABLE="/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"

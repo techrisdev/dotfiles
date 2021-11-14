@@ -44,6 +44,12 @@
   (add-hook 'prog-mode-hook 'yas-minor-mode)
   (add-hook 'text-mode-hook 'yas-minor-mode))
 
+(add-to-list 'load-path "~/sources/emacs-webkit/")
+(require 'webkit) 
+(global-set-key (kbd "s-b") 'webkit) ;; Bind to whatever global key binding you want if you want
+(require 'webkit-ace) ;; If you want link hinting
+(require 'webkit-dark) ;; If you want to use the simple dark mode
+
 (unless (package-installed-p 'nord-theme)
   (package-install 'nord-theme))
 
@@ -145,7 +151,7 @@
     (tool-bar-mode -1) ;; Disable the toolbar.
     (menu-bar-mode -1) ;; Disable the menubar.
     (setq-default mode-line-format nil) ;; Hide the mode line on the bottom
-    (add-hook 'window-setup-hook 'toggle-frame-fullscreen t) ;; Start in fullscreen mode.
+    (add-hook 'window-setup-hook 'toggle-frame-maximized t) ;; Start in fullscreen mode.
     (setq visible-bell nil) ;; Disable the macOS Error Sound and flash instead.
 (setq ring-bell-function 'ignore)
 

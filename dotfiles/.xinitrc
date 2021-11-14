@@ -6,7 +6,7 @@ xrdb -merge ~/.Xresources
 #herbstluftwm --locked
 #feh --bg-fill ~/Pictures/wallpapers/0001.jpg
 #picom -b
-emacs-28.0.50 --eval "(add-hook 'after-init-hook #'exwm-enable)"
+#emacs-28.0.50 --eval "(add-hook 'after-init-hook #'exwm-enable)"
 #instantwm
 #slstatus &
-#dwm
+dwm
