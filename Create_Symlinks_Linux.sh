@@ -2,7 +2,7 @@
 rm -f ~/.zshrc
 rm -f ~/.zshrcmac
 rm -f ~/.zshrclinux
-rm -rf ~/.config/alacritty/*
+rm -f ~/.config/alacritty/*
 cd ~/.dotfiles
 stow dotfiles
 cd
