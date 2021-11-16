@@ -1,0 +1,3 @@
+#!/bin/sh
+git pull
+./Create_Symlinks_Linux.sh
