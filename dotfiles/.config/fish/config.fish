@@ -1,11 +1,11 @@
 ##### My fish config
 ### Startup tmux if it isn't running already (before doing anything else)
 if [ "$TMUX" = "" ]
-	/opt/local/bin/tmux attach 
+	/opt/homebrew/bin/tmux attach 
 end
 
 ### Path variables
-export PATH="/opt/local/bin:/opt/local/sbin:/opt/local/libexec/llvm-11/bin:/bin:/usr/local/bin:/usr/bin:$HOME/.cargo/bin:$HOME/.bin"
+export PATH="/opt/homebrew/bin:/opt/local/bin:/opt/local/sbin:/opt/local/libexec/llvm-11/bin:/bin:/usr/local/bin:/usr/bin:$HOME/.cargo/bin:$HOME/.bin"
 
 ### Other variables
 # Set the language to english if it isn't already
@@ -36,7 +36,7 @@ function sudo
 	if [ (count $argv) -gt 1 ]
 		if [ $argv[1] = "vim" ]
 			/usr/bin/sudo nvim $argv[2]
-		# This is not good code, I was to lazy to find out how to do '&&' in fish
+		# This is not good code, I was too lazy to find out how to do '&&' in fish
 		else
 			/usr/bin/sudo $argv
 		end
@@ -48,8 +48,26 @@ end
 # Use exa instead of ls
 alias ls="exa --icons -a --group-directories-first"
 
-# MacPorts Package Manager
-alias update='sudo port selfupdate; sudo port upgrade outdated; sudo port uninstall inactive'
+# Package Manager
+#alias update='sudo port selfupdate; sudo port upgrade outdated; sudo port uninstall inactive'
+alias update='brew upgrade; brew cleanup'
+
+# Memory and Swap usage
+alias mem='top -l 1 -s 0 | grep PhysMem'
+alias swap='sysctl vm.swapusage'
+
+# Clear the screen and scrollback
+alias scrollclear="clear && printf '\e[3J'"
+
+alias gp="git push"
+
+# Use Python 3 by default if it isn't already
+alias python="python3"
+alias pip="python3 -m pip"
+
+# For macOS: Change shortcuts for my Keyboard Shortcut Script
+alias change_shortcut="sh dev/Projects/desktop-manager/Install_Launcher.sh"
+
 
 ### Other configuration
 # Disable the fish greeting

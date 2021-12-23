@@ -74,6 +74,9 @@ alias gp="git push"
 alias python="python3"
 alias pip="python3 -m pip"
 
+# For macOS: Change shortcuts for my Keyboard Shortcut Script
+alias change_shortcut="sh dev/Projects/desktop-manager/Install_Launcher.sh"
+
 ### Other Configuration
 # Enable vi mode
 bindkey -v
